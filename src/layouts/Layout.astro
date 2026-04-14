@@ -1,0 +1,65 @@
+---
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/700.css';
+import '@fontsource/fira-code/400.css';
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+	description?: string;
+}
+
+const { title, description = "Portfolio of Christian Paez - Lead Developer & Project Manager" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content={description} />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title} | Christian Paez</title>
+	</head>
+	<body class="bg-cyber-bg text-white selection:bg-cyber-pink selection:text-white min-h-screen">
+		<div class="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_50%_50%,_rgba(255,0,255,0.05),_transparent_50%),_radial-gradient(circle_at_80%_20%,_rgba(0,255,255,0.05),_transparent_40%)]"></div>
+		
+		<slot />
+	</body>
+</html>
+
+<style is:global>
+	:root {
+		--font-jetbrains: 'JetBrains Mono', monospace;
+		--font-fira: 'Fira Code', monospace;
+	}
+
+	html {
+		scroll-behavior: smooth;
+	}
+
+	body {
+		font-family: var(--font-jetbrains);
+	}
+
+	/* Custom scrollbar for cyberpunk feel */
+	::-webkit-scrollbar {
+		width: 8px;
+	}
+
+	::-webkit-scrollbar-track {
+		background: #050505;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background: #1a1a1a;
+		border: 1px solid #1a1a1a;
+		border-radius: 4px;
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		background: #ff00ff;
+		box-shadow: 0 0 10px #ff00ff;
+	}
+</style>

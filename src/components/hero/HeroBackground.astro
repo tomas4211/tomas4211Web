@@ -1,0 +1,54 @@
+---
+// HeroBackground.astro — Ambient cyberpunk background (page-wide, no photo)
+import HeroFx from './HeroFx';
+---
+
+<div
+  id="hero-bg"
+  class="fixed inset-0 -z-10 overflow-hidden pointer-events-none"
+  aria-hidden="true"
+>
+  <!-- Base dark -->
+  <div class="absolute inset-0 bg-[#050505]"></div>
+
+  <!-- Ambient magenta blob (top-left) -->
+  <div
+    class="absolute -top-32 -left-32 w-[45vw] h-[45vw] rounded-full"
+    style="
+      background: radial-gradient(circle, rgba(160,0,110,0.14) 0%, transparent 70%);
+      filter: blur(70px);
+      animation: blobDrift 9s ease-in-out infinite alternate;
+    "
+  ></div>
+
+  <!-- Ambient cyan blob (bottom-right) -->
+  <div
+    class="absolute -bottom-32 -right-32 w-[45vw] h-[45vw] rounded-full"
+    style="
+      background: radial-gradient(circle, rgba(0,160,160,0.14) 0%, transparent 70%);
+      filter: blur(70px);
+      animation: blobDrift 12s ease-in-out infinite alternate-reverse;
+    "
+  ></div>
+
+  <!-- Scanlines -->
+  <div
+    class="absolute inset-0"
+    style="
+      background-image: repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px
+      );
+    "
+  ></div>
+
+  <!-- Code-rain canvas -->
+  <HeroFx client:load />
+</div>
+
+<style>
+  @keyframes blobDrift {
+    0%   { transform: translate(0, 0)   scale(1);    }
+    100% { transform: translate(30px, 25px) scale(1.07); }
+  }
+</style>

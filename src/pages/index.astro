@@ -1,0 +1,518 @@
+---
+import InteractiveTerminal from '../components/terminal/InteractiveTerminal';
+import HeroBackground from '../components/hero/HeroBackground.astro';
+import MilestonesSection from '../components/projects/MilestonesSection';
+import { getUnifiedProjects } from '../services/github';
+import { Shield, Code, Github, ExternalLink, GraduationCap, Zap } from 'lucide-astro';
+import Layout from '../layouts/Layout.astro';
+import { es, en } from '../i18n/index';
+
+const projects = await getUnifiedProjects();
+
+// Build-time data for both languages
+const dicts   = { es, en };
+const initial = 'es'; // SSR default is Spanish
+const d       = dicts[initial];
+
+const milestoneKeys = ['credix_migration', 'finanve_pwa', 'elementum_web3'] as const;
+const milestoneExtra = {
+  credix_migration: { color: 'pink',   account: 'tomas4211'  },
+  finanve_pwa:      { color: 'blue',   account: 'tomas4211'  },
+  elementum_web3:   { color: 'yellow', account: 'RyuTsuki08' },
+};
+---
+
+<Layout title="Christian Paez | Lead Dev & PM">
+  <main class="relative min-h-screen" id="portfolio-root" data-lang="es">
+
+    <!-- ── HERO BACKGROUND (portrait + cyberpunk layers) ─────────── -->
+    <HeroBackground />
+
+    <!-- ── NAVBAR ──────────────────────────────────────────────────── -->
+    <header class="max-w-7xl mx-auto px-6 pt-6 flex justify-between items-center">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-[#ff00ff] animate-ping"></span>
+        <span class="font-mono text-[10px] uppercase tracking-widest text-gray-500" data-i18n="nav.status">SIS.LISTO</span>
+      </div>
+      <nav class="flex items-center gap-4 flex-wrap justify-end">
+        <a href="https://github.com/tomas4211" target="_blank" rel="noopener"
+           class="flex items-center gap-1.5 text-gray-500 hover:text-[#ff00ff] transition-colors text-xs font-mono">
+          <Github class="w-4 h-4" />tomas4211
+        </a>
+        <a href="https://github.com/RyuTsuki08" target="_blank" rel="noopener"
+           class="flex items-center gap-1.5 text-gray-500 hover:text-[#00ffff] transition-colors text-xs font-mono">
+          <Github class="w-4 h-4" />RyuTsuki08
+        </a>
+        <!-- Terminal-styled lang toggle: managed by JS -->
+        <div id="lang-switcher-nav"
+             class="inline-flex items-center font-mono text-xs select-none"
+             style="border:1px solid rgba(255,255,255,0.1);border-radius:6px;overflow:hidden">
+          <button id="btn-es" onclick="window.__setLang('es')"
+                  class="px-3 py-1 uppercase tracking-widest transition-all duration-200"
+                  style="background:rgba(255,0,255,0.2);color:#ff00ff;text-shadow:0 0 8px #ff00ff;border-right:1px solid rgba(255,255,255,0.1)">
+            ES
+          </button>
+          <button id="btn-en" onclick="window.__setLang('en')"
+                  class="px-3 py-1 uppercase tracking-widest transition-all duration-200"
+                  style="color:rgba(255,255,255,0.3)">
+            EN
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- ── HERO — DUAL IDENTITY ────────────────────────────────────── -->
+    <section class="relative overflow-hidden max-w-full px-0 pt-0 pb-0 lg:min-h-[96vh] flex flex-col justify-center">
+
+      <!-- Portrait: right side, scoped to hero only -->
+      <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <!-- Photo: right half only -->
+        <div
+          id="parallax-layer"
+          class="absolute right-0 top-0 h-full w-[55%] scale-105 will-change-transform"
+        >
+          <img
+            src="/photo_perfil.jpeg"
+            alt=""
+            class="absolute inset-0 w-full h-full object-cover object-top select-none"
+            style="filter:grayscale(100%) contrast(1.18) brightness(0.55);"
+            draggable="false"
+          />
+          <!-- Cyan tint overlay -->
+          <div class="absolute inset-0"
+               style="background:linear-gradient(135deg,transparent 30%,rgba(0,80,100,0.35) 100%);mix-blend-mode:color;"></div>
+        </div>
+
+        <!-- Left edge fade: merges photo edge with the dark left side -->
+        <div class="absolute inset-y-0 left-[30%] w-[30%]"
+             style="background:linear-gradient(to right,#050505,transparent)"></div>
+
+        <!-- Deep vignette: darkens top, bottom and far right -->
+        <div class="absolute inset-0"
+             style="background:
+               radial-gradient(ellipse 70% 90% at 72% 45%,
+                 transparent 0%,
+                 transparent 30%,
+                 rgba(0,0,0,0.25) 55%,
+                 rgba(0,0,0,0.70) 78%,
+                 #000 100%
+               )"></div>
+        <!-- Top + bottom solid fades -->
+        <div class="absolute inset-x-0 top-0 h-32"
+             style="background:linear-gradient(to bottom,#050505,transparent)"></div>
+        <div class="absolute inset-x-0 bottom-0 h-40"
+             style="background:linear-gradient(to top,#050505,transparent)"></div>
+      </div>
+
+      <!-- SVG diagonal fault line across the hero split -->
+      <svg class="absolute inset-0 w-full h-full pointer-events-none"
+           viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <linearGradient id="hFaultGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%"   stop-color="#ff00ff" stop-opacity="0.5"/>
+            <stop offset="50%"  stop-color="#fff"    stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="#00ffff" stop-opacity="0.5"/>
+          </linearGradient>
+          <filter id="hGlow"><feGaussianBlur stdDeviation="2" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <line x1="400" y1="-20" x2="870" y2="920"
+              stroke="url(#hFaultGrad)" stroke-width="1.5"
+              stroke-dasharray="14 8 3 8" filter="url(#hGlow)"
+              style="animation:hFaultDash 7s linear infinite"/>
+      </svg>
+
+      <!-- Actual hero content (sits above the photo layers) -->
+      <div class="relative z-10 max-w-7xl mx-auto w-full px-6 pt-20 pb-16">
+
+        <!-- Single column: all content on the left, photo breathes on the right -->
+        <div class="max-w-xl space-y-8">
+
+          <!-- Name + tagline -->
+          <div class="space-y-3">
+            <span class="font-mono text-[10px] uppercase tracking-[0.4em] text-[#ff00ff]/60" data-i18n="hero.role">Lead Developer &amp; PM</span>
+            <h1
+              id="hero-name"
+              class="glitch-text text-5xl md:text-7xl font-black tracking-tighter uppercase leading-none text-white"
+              data-text="CHRISTIAN PAEZ"
+            >
+              CHRISTIAN PAEZ
+            </h1>
+            <p class="text-gray-400 font-mono text-sm max-w-md leading-relaxed" data-i18n="hero.tagline">
+              {d.hero.tagline}
+            </p>
+          </div>
+
+          <!-- PM identity card (magenta) -->
+          <div class="relative p-6 rounded-xl overflow-hidden group pm-card"
+               style="background:rgba(5,5,5,0.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,0,255,0.25);box-shadow:0 0 30px rgba(255,0,255,0.06)">
+            <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                 style="background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(255,0,255,0.12),transparent 60%)"></div>
+            <div class="relative z-10 flex gap-4 items-start">
+              <div class="p-3 rounded-lg bg-[#ff00ff]/10 shrink-0">
+                <Shield class="w-8 h-8 text-[#ff00ff]" />
+              </div>
+              <div>
+                <span class="font-mono text-[10px] uppercase tracking-[0.4em] text-[#ff00ff]/60" data-i18n="identity.pm.label">Liderazgo Ejecutivo</span>
+                <h2 class="font-bold text-lg text-[#ff00ff]" style="text-shadow:0 0 8px rgba(255,0,255,0.5)" data-i18n="identity.pm.title">Gestión de Proyectos</h2>
+                <p class="text-gray-400 text-sm mt-1 font-mono leading-relaxed whitespace-pre-line" data-i18n="identity.pm.description">
+                  {d.identity.pm.description}
+                </p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  {d.identity.pm.tags.map(t => (
+                    <span class="px-2 py-0.5 text-[10px] font-mono border border-[#ff00ff]/20 rounded text-[#ff00ff]/70">{t}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CLI card + metrics stacked vertically below PM -->
+          <div class="flex flex-col gap-4">
+
+            <!-- CLI identity card (cyan) -->
+            <div class="relative p-5 rounded-xl overflow-hidden group cli-card"
+                 style="background:rgba(0,255,255,0.04);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(0,255,255,0.2)">
+              <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                   style="background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(0,255,255,0.10),transparent 60%)"></div>
+              <div class="relative z-10 flex gap-3 items-start">
+                <div class="p-2 rounded-lg bg-[#00ffff]/10 shrink-0">
+                  <Code class="w-6 h-6 text-[#00ffff]" />
+                </div>
+                <div>
+                  <span class="font-mono text-[10px] uppercase tracking-[0.4em] text-[#00ffff]/60" data-i18n="identity.cli.label">Terminal Ninja</span>
+                  <h2 class="font-bold text-base text-[#00ffff]" style="text-shadow:0 0 8px rgba(0,255,255,0.5)" data-i18n="identity.cli.title">Automatización Low-Level</h2>
+                  <div class="mt-2 flex flex-wrap gap-1.5">
+                    {d.identity.cli.tags.map(t => (
+                      <span class="px-2 py-0.5 text-[10px] font-mono border border-[#00ffff]/20 rounded text-[#00ffff]/70">{t}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Metrics strip — always horizontal row -->
+            <div class="grid grid-cols-3 gap-3" id="metrics-strip">
+              {d.metrics.map(({ val, label }, i) => (
+                <div class="p-4 rounded-xl flex flex-col items-center justify-center text-center"
+                     style="background:rgba(255,255,255,0.03);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.06)">
+                  <p class="text-2xl font-black text-white">{val}</p>
+                  <p class="text-[10px] font-mono uppercase tracking-widest text-gray-500 mt-0.5" data-i18n={`metrics.${i}.label`}>{label}</p>
+                </div>
+              ))}
+            </div>
+
+        </div><!-- /max-w-xl -->
+
+        <!-- CTA -->
+        <div class="mt-12 flex flex-col md:flex-row gap-4 items-center">
+          <button id="open-terminal"
+                  class="group flex items-center gap-3 px-7 py-3 rounded-lg font-mono text-sm uppercase tracking-widest transition-all"
+                  style="background:rgba(0,255,255,0.06);border:1px solid rgba(0,255,255,0.3)">
+            <span class="text-[#00ffff] group-hover:animate-pulse">$</span>
+            <span class="text-gray-300" data-i18n="hero.ctaBtn">Iniciar Sesión</span>
+            <Zap class="w-4 h-4 text-[#00ffff] opacity-0 group-hover:opacity-100 transition-opacity" />
+          </button>
+          <p class="text-gray-600 text-xs font-mono" data-i18n="hero.ctaHint">{d.hero.ctaHint}</p>
+        </div>
+      </div><!-- /z-10 content wrapper -->
+    </section>
+
+    <!-- ── PROJECT MILESTONES ──────────────────────────────────────── -->
+    <section class="max-w-7xl mx-auto px-6 py-20">
+      <div class="flex items-center gap-4 mb-12">
+        <span class="font-mono text-[10px] uppercase tracking-[0.4em] text-gray-600" data-i18n="milestones.heading">hitos</span>
+        <div class="h-px flex-1 bg-white/5"></div>
+        <span class="font-mono text-[10px] text-gray-700">// Click para detalles</span>
+      </div>
+      <MilestonesSection client:load />
+    </section>
+
+    <!-- ── GITHUB UNIFIED FEED ─────────────────────────────────────── -->
+    <section class="max-w-7xl mx-auto px-6 py-20">
+      <div class="flex items-center gap-4 mb-3">
+        <Github class="w-5 h-5 text-gray-500" />
+        <h2 class="text-xl font-bold text-white uppercase tracking-wider" data-i18n="github.heading">GitHub Unificado</h2>
+        <div class="h-px flex-1 bg-white/5"></div>
+      </div>
+      <div class="flex gap-4 mb-10 flex-wrap">
+        <a href="https://github.com/tomas4211" target="_blank" rel="noopener"
+           class="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-mono transition-all hover:brightness-125"
+           style="background:rgba(255,0,255,0.12);border:1px solid rgba(255,0,255,0.3);color:#ff00ff">
+          <Github class="w-3.5 h-3.5" /> tomas4211 · <span data-i18n="github.execBadge">Ejecutivo</span>
+        </a>
+        <a href="https://github.com/RyuTsuki08" target="_blank" rel="noopener"
+           class="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-mono transition-all hover:brightness-125"
+           style="background:rgba(0,255,255,0.12);border:1px solid rgba(0,255,255,0.3);color:#00ffff">
+          <Github class="w-3.5 h-3.5" /> RyuTsuki08 · <span data-i18n="github.labsBadge">Laboratorio Personal</span>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {projects.map(repo => {
+          const isExec    = repo.owner === 'tomas4211';
+          const accent    = isExec ? '#ff00ff' : '#00ffff';
+          const borderClr = isExec ? 'rgba(255,0,255,0.25)' : 'rgba(0,255,255,0.25)';
+          const bgClr     = isExec ? 'rgba(255,0,255,0.05)' : 'rgba(0,255,255,0.05)';
+          const badgeBg   = isExec ? 'rgba(255,0,255,0.12)' : 'rgba(0,255,255,0.12)';
+          const ghUrl     = `https://github.com/${repo.owner}`;
+          return (
+            <a href={repo.html_url} target="_blank" rel="noopener"
+               class="group flex flex-col gap-3 p-5 rounded-xl transition-all duration-300 hover:scale-[1.02] hover:brightness-110"
+               style={`border:1px solid ${borderClr};background:${bgClr};border-left:3px solid ${accent}`}>
+              <div class="flex items-start justify-between gap-2">
+                <div class="min-w-0">
+                  <a href={ghUrl} target="_blank" rel="noopener"
+                     class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono mb-1.5"
+                     style={`background:${badgeBg};color:${accent};border:1px solid ${borderClr}`}
+                     onclick="event.stopPropagation()">
+                    @{repo.owner}
+                  </a>
+                  <p class="font-bold text-white text-base leading-snug break-all">{repo.name}</p>
+                </div>
+                <ExternalLink class="w-4 h-4 shrink-0 mt-1 text-gray-500 group-hover:text-white transition-colors" />
+              </div>
+              <p class="text-sm text-gray-300 font-mono leading-relaxed line-clamp-3">
+                {repo.description || <span class="text-gray-600 italic">—</span>}
+              </p>
+              <div class="mt-auto pt-2 flex items-center justify-between border-t border-white/5">
+                {repo.language
+                  ? <span class="text-xs font-mono font-semibold" style={`color:${accent}`}>{repo.language}</span>
+                  : <span />}
+                {repo.stargazers_count > 0 && <span class="text-xs text-gray-400 font-mono">★ {repo.stargazers_count}</span>}
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+
+    <!-- ── EDUCATION ───────────────────────────────────────────────── -->
+    <section class="max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+      <div class="space-y-6">
+        <div class="flex items-center gap-4">
+          <GraduationCap class="w-5 h-5 text-gray-500" />
+          <span class="font-mono text-[10px] uppercase tracking-[0.4em] text-gray-500" data-i18n="education.heading">Formación</span>
+          <div class="h-px flex-1 bg-white/5"></div>
+        </div>
+
+        <!-- IUJO row -->
+        <div class="flex justify-between items-start p-5 rounded-xl"
+             style="border:1px solid rgba(255,0,255,0.15);background:rgba(255,0,255,0.03)">
+          <div>
+            <h4 class="font-bold text-white" data-i18n="education.items.0.degree">
+              TSU en Informática — 3er Semestre (Activo)
+            </h4>
+            <p class="text-xs font-mono text-gray-500 mt-0.5" data-i18n="education.items.0.institution">
+              IUJO (Instituto Universitario Jesús Obrero)
+            </p>
+          </div>
+          <span class="shrink-0 px-2 py-0.5 text-[10px] font-mono rounded text-green-400"
+                style="background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2)"
+                data-i18n="education.items.0.year">
+            En curso
+          </span>
+        </div>
+
+        <!-- Samsung row -->
+        <div class="flex justify-between items-start p-5 rounded-xl"
+             style="border:1px solid rgba(0,255,255,0.1);background:rgba(0,255,255,0.03)">
+          <div>
+            <h4 class="font-bold text-white" data-i18n="education.items.1.degree">
+              Diplomado en Inteligencia Artificial &amp; Python
+            </h4>
+            <p class="text-xs font-mono text-gray-500 mt-0.5" data-i18n="education.items.1.institution">
+              Samsung Innovation Campus
+            </p>
+          </div>
+          <span class="text-[10px] font-mono text-[#00ffff] shrink-0" data-i18n="education.items.1.year">2023</span>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="text-4xl font-black uppercase tracking-tighter leading-none">
+          <span style="color:#ff00ff;text-shadow:0 0 20px rgba(255,0,255,0.4)" data-i18n="education.cta.title">Listo para Despliegue</span>
+        </h2>
+        <p class="text-gray-500 font-mono text-sm mt-4 max-w-sm leading-relaxed" data-i18n="education.cta.body">
+          {d.education.cta.body}
+        </p>
+      </div>
+    </section>
+
+    <!-- ── FOOTER ──────────────────────────────────────────────────── -->
+    <footer class="max-w-7xl mx-auto px-6 py-10 border-t border-white/5 flex flex-wrap justify-between items-center gap-4">
+      <span class="text-[10px] font-mono text-gray-700 uppercase tracking-widest" data-i18n="footer.copyright">© 2026 Christian Paez // v2.0.0-NINJA</span>
+      <div class="flex gap-5">
+        <span class="text-[10px] font-mono text-[#ff00ff] animate-pulse" data-i18n="footer.pmStatus">● PM : ACTIVO</span>
+        <span class="text-[10px] font-mono text-[#00ffff] animate-pulse [animation-delay:0.7s]" data-i18n="footer.cliStatus">● CLI: EN LÍNEA</span>
+      </div>
+    </footer>
+
+    <!-- Terminal React Island -->
+    <InteractiveTerminal client:load initialLang="es" />
+  </main>
+</Layout>
+
+<script>
+// ── Flat i18n lookup table (both langs embedded at build time) ────────────
+
+const dicts: Record<string, Record<string, string>> = {
+  es: {
+    'nav.status': 'SIS.LISTO',
+    'hero.role': 'Lead Developer & PM',
+    'hero.tagline': 'Arquitecto Frontend Senior construyendo sistemas de alto rendimiento y cultura de ingeniería en Caracas, desde 2022.',
+    'hero.ctaBtn': 'Iniciar Sesión',
+    'hero.ctaHint': 'Escribe fastfetch después de abrir para ver las specs',
+    'identity.pm.label': 'Liderazgo Ejecutivo',
+    'identity.pm.title': 'Gestión de Proyectos',
+    'identity.pm.description': 'Refinamiento de backlog · Planificación de sprints · Alineación de stakeholders\nCredix (Angular 19) · Finanve PWA · SSO Multi-tenant',
+    'identity.cli.label': 'Terminal Ninja',
+    'identity.cli.title': 'Automatización Low-Level',
+    'identity.cli.description': 'GNU/Linux · Zsh + Oh My Posh · Neovim\nMotoko / ICP · Web3 · Scripting en Bash',
+    'metrics.0.label': 'Años',
+    'metrics.1.label': 'Productos Live',
+    'metrics.2.label': 'Cuentas GitHub',
+    'milestones.heading': 'hitos',
+    'milestones.items.credix_migration.title': 'Migración Credix',
+    'milestones.items.credix_migration.subtitle': 'Angular 19 · SSO Multi-tenant',
+    'milestones.items.credix_migration.metric': '+40% velocidad',
+    'milestones.items.credix_migration.description': 'Lideré la migración crítica de Angular 14 → 19 en una plataforma fintech enterprise con arquitectura multi-tenant y pipeline automatizado de componentes.',
+    'milestones.items.finanve_pwa.title': 'Finanve PWA',
+    'milestones.items.finanve_pwa.subtitle': 'Astro · Offline-first · Tasas BCV en vivo',
+    'milestones.items.finanve_pwa.metric': '98 Lighthouse',
+    'milestones.items.finanve_pwa.description': 'Arquitecté una Progressive Web App para gestión financiera con tasas de cambio venezolanas en tiempo real y almacenamiento IndexedDB offline-first.',
+    'milestones.items.elementum_web3.title': 'Elementum Web3',
+    'milestones.items.elementum_web3.subtitle': 'Motoko · ICP · Sin comisiones de gas',
+    'milestones.items.elementum_web3.metric': '100% on-chain',
+    'milestones.items.elementum_web3.description': 'Protocolo DeFi en el Internet Computer Protocol con lógica de canister on-chain e Internet Identity para autenticación descentralizada.',
+    'github.heading': 'GitHub Unificado',
+    'github.execBadge': 'Ejecutivo',
+    'github.labsBadge': 'Laboratorio Personal',
+    'education.heading': 'Formación',
+    'education.items.0.degree': 'TSU en Informática — 3er Semestre (Activo)',
+    'education.items.0.institution': 'IUJO (Instituto Universitario Jesús Obrero)',
+    'education.items.0.year': 'En curso',
+    'education.items.1.degree': 'Diplomado en Inteligencia Artificial & Python',
+    'education.items.1.institution': 'Samsung Innovation Campus',
+    'education.items.1.year': '2023',
+    'education.cta.title': 'Listo para Despliegue',
+    'education.cta.body': 'Disponible para proyectos de alto impacto que requieran gestión profesional y profunda rigurosidad técnica.',
+    'footer.copyright': '© 2026 Christian Paez // v2.0.0-NINJA',
+    'footer.pmStatus': '● PM : ACTIVO',
+    'footer.cliStatus': '● CLI: EN LÍNEA',
+  },
+  en: {
+    'nav.status': 'SYS.READY',
+    'hero.role': 'Lead Developer & PM',
+    'hero.tagline': 'Senior Frontend Architect building high-performance systems and engineering culture in Caracas — since 2022.',
+    'hero.ctaBtn': 'Initialize Session',
+    'hero.ctaHint': 'Type fastfetch after opening for specs',
+    'identity.pm.label': 'Executive Leadership',
+    'identity.pm.title': 'Project Management',
+    'identity.pm.description': 'Backlog refinement · Sprint planning · Stakeholder alignment\nCredix (Angular 19) · Finanve PWA · Multi-tenant SSO',
+    'identity.cli.label': 'Terminal Ninja',
+    'identity.cli.title': 'Low-Level Automation',
+    'identity.cli.description': 'GNU/Linux · Zsh + Oh My Posh · Neovim\nMotoko / ICP · Web3 · Bash scripting',
+    'metrics.0.label': 'Years',
+    'metrics.1.label': 'Live Products',
+    'metrics.2.label': 'GitHub Accounts',
+    'milestones.heading': 'milestones',
+    'milestones.items.credix_migration.title': 'Credix Migration',
+    'milestones.items.credix_migration.subtitle': 'Angular 19 · Multi-tenant SSO',
+    'milestones.items.credix_migration.metric': '+40% build speed',
+    'milestones.items.credix_migration.description': 'Led the critical migration from Angular 14 → 19 on an enterprise fintech platform with multi-tenant architecture and automated component pipeline.',
+    'milestones.items.finanve_pwa.title': 'Finanve PWA',
+    'milestones.items.finanve_pwa.subtitle': 'Astro · Offline-first · BCV live rates',
+    'milestones.items.finanve_pwa.metric': '98 Lighthouse',
+    'milestones.items.finanve_pwa.description': 'Architected a Progressive Web App for financial management with real-time Venezuelan exchange rates and offline-first IndexedDB storage.',
+    'milestones.items.elementum_web3.title': 'Elementum Web3',
+    'milestones.items.elementum_web3.subtitle': 'Motoko · ICP · Zero gas fees',
+    'milestones.items.elementum_web3.metric': '100% on-chain',
+    'milestones.items.elementum_web3.description': 'Decentralized finance protocol on the Internet Computer Protocol with on-chain canister logic and Internet Identity for decentralized authentication.',
+    'github.heading': 'Unified GitHub',
+    'github.execBadge': 'Executive',
+    'github.labsBadge': 'Personal Labs',
+    'education.heading': 'Formation',
+    'education.items.0.degree': 'TSU in Computer Science — 3rd Semester (Active)',
+    'education.items.0.institution': 'IUJO (Instituto Universitario Jesús Obrero)',
+    'education.items.0.year': 'In Progress',
+    'education.items.1.degree': 'AI & Python Diploma',
+    'education.items.1.institution': 'Samsung Innovation Campus',
+    'education.items.1.year': '2023',
+    'education.cta.title': 'Ready for Deployment',
+    'education.cta.body': 'Available for high-stakes projects requiring both strong management and deep technical rigor.',
+    'footer.copyright': '© 2026 Christian Paez // v2.0.0-NINJA',
+    'footer.pmStatus': '● PM : ACTIVE',
+    'footer.cliStatus': '● CLI: ONLINE',
+  },
+};
+
+// ── Apply translations to all [data-i18n] elements ───────────────────────
+
+function applyLang(lang: string) {
+  const dict = dicts[lang] ?? dicts['es'];
+  document.querySelectorAll<HTMLElement>('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n!;
+    const val = dict[key];
+    if (val !== undefined) el.textContent = val;
+  });
+  // Update html attribute
+  document.documentElement.setAttribute('data-lang', lang);
+  document.getElementById('portfolio-root')?.setAttribute('data-lang', lang);
+  // Update navbar toggle visual
+  const btnEs = document.getElementById('btn-es') as HTMLButtonElement | null;
+  const btnEn = document.getElementById('btn-en') as HTMLButtonElement | null;
+  if (btnEs && btnEn) {
+    if (lang === 'es') {
+      Object.assign(btnEs.style, { background: 'rgba(255,0,255,0.2)', color: '#ff00ff', textShadow: '0 0 8px #ff00ff' });
+      Object.assign(btnEn.style, { background: 'transparent', color: 'rgba(255,255,255,0.3)', textShadow: 'none' });
+    } else {
+      Object.assign(btnEn.style, { background: 'rgba(0,255,255,0.2)', color: '#00ffff', textShadow: '0 0 8px #00ffff' });
+      Object.assign(btnEs.style, { background: 'transparent', color: 'rgba(255,255,255,0.3)', textShadow: 'none' });
+    }
+  }
+}
+
+// Expose to navbar inline onclick handlers
+(window as any).__setLang = (lang: string) => {
+  applyLang(lang);
+  // Tell the React terminal island to also switch
+  window.dispatchEvent(new CustomEvent('setlang', { detail: { lang } }));
+};
+
+// Listen for changes coming FROM the terminal
+window.addEventListener('langchange', (e: Event) => {
+  applyLang((e as CustomEvent).detail.lang);
+});
+
+// ── Hover glow on id cards ────────────────────────────────────────────────
+document.querySelectorAll<HTMLElement>('.pm-card, .cli-card').forEach(el => {
+  el.addEventListener('mousemove', (e: MouseEvent) => {
+    const r = el.getBoundingClientRect();
+    el.style.setProperty('--mx', `${((e.clientX - r.left) / r.width) * 100}%`);
+    el.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`);
+  });
+});
+
+// ── Conic-gradient on milestone cards ────────────────────────────────────
+const colorMap: Record<string, string> = { pink: '#ff00ff', blue: '#00ffff', yellow: '#fefe00' };
+document.querySelectorAll<HTMLElement>('.project-card').forEach(card => {
+  const ring  = card.querySelector<HTMLElement>('.conic-ring')!;
+  const color = colorMap[card.dataset.color ?? 'blue'] ?? '#00ffff';
+  card.addEventListener('mouseenter', () => {
+    ring.style.opacity = '1';
+    ring.style.background = `conic-gradient(from 0deg, ${color}, transparent 25%, ${color}88, transparent 50%, ${color}, transparent 75%, ${color}88)`;
+    ring.style.padding = '1px';
+    ring.style.webkitMask = 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)';
+    ring.style.webkitMaskComposite = 'xor';
+    ring.style.maskComposite = 'exclude';
+  });
+  card.addEventListener('mouseleave', () => { ring.style.opacity = '0'; });
+});
+
+// ── Terminal CTA wires to React island ───────────────────────────────────
+document.getElementById('open-terminal')?.addEventListener('click', () => {
+  document.querySelector<HTMLButtonElement>('[title="Open Terminal"]')?.click();
+});
+</script>

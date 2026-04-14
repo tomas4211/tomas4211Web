@@ -1,0 +1,159 @@
+@import "tailwindcss";
+
+@theme {
+  --font-jetbrains: "JetBrains Mono", monospace;
+  --font-fira: "Fira Code", monospace;
+
+  --color-cyber-pink: #ff00ff;
+  --color-cyber-blue: #00ffff;
+  --color-cyber-yellow: #fefe00;
+  --color-cyber-bg: #050505;
+  --color-cyber-card: rgba(15, 15, 15, 0.7);
+
+  --shadow-neon-pink: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+  --shadow-neon-blue: 0 0 10px #00ffff, 0 0 20px #00ffff;
+}
+
+@layer base {
+  :root {
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-blur: 12px;
+  }
+
+  body {
+    background-color: var(--color-cyber-bg);
+    color: white;
+    font-family: var(--font-jetbrains);
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: var(--color-cyber-pink);
+    color: white;
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+  }
+
+  .text-glow-pink {
+    text-shadow: 0 0 8px rgba(255, 0, 255, 0.8);
+  }
+
+  .text-glow-blue {
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.8);
+  }
+
+  .neon-border-pink {
+    border: 1px solid var(--color-cyber-pink);
+    box-shadow: var(--shadow-neon-pink);
+  }
+
+  .neon-border-blue {
+    border: 1px solid var(--color-cyber-blue);
+    box-shadow: var(--shadow-neon-blue);
+  }
+
+  .glitch-text {
+    position: relative;
+  }
+
+  .glitch-text::before,
+  .glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .glitch-text::before {
+    left: 2px;
+    text-shadow: -2px 0 var(--color-cyber-pink);
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim 5s infinite linear alternate-reverse;
+  }
+
+  .glitch-text::after {
+    left: -2px;
+    text-shadow: -2px 0 var(--color-cyber-blue);
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim2 5s infinite linear alternate-reverse;
+  }
+}
+
+@keyframes glitch-anim {
+  0% { clip: rect(10px, 9999px, 85px, 0); }
+  20% { clip: rect(33px, 9999px, 5px, 0); }
+  40% { clip: rect(56px, 9999px, 92px, 0); }
+  60% { clip: rect(81px, 9999px, 12px, 0); }
+  80% { clip: rect(4px, 9999px, 64px, 0); }
+  100% { clip: rect(97px, 9999px, 34px, 0); }
+}
+
+@keyframes glitch-anim2 {
+  0% { clip: rect(25px, 9999px, 40px, 0); }
+  20% { clip: rect(67px, 9999px, 98px, 0); }
+  40% { clip: rect(12px, 9999px, 56px, 0); }
+  60% { clip: rect(89px, 9999px, 10px, 0); }
+  80% { clip: rect(54px, 9999px, 72px, 0); }
+  100% { clip: rect(2px, 9999px, 88px, 0); }
+}
+
+/* ── Glitch hero name (no gradient — dark/white) ─────────────── */
+.hero-name-glitch {
+  position: relative;
+  color: #ffffff;
+  filter: drop-shadow(0 0 12px rgba(255,255,255,0.08));
+}
+
+.hero-name-glitch::before,
+.hero-name-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-name-glitch::before {
+  left: 2px;
+  filter: drop-shadow(-2px 0 #ff00ff);
+  animation: hero-glitch-1 5s infinite linear alternate-reverse;
+}
+
+.hero-name-glitch::after {
+  left: -2px;
+  filter: drop-shadow(2px 0 #00ffff);
+  animation: hero-glitch-2 5s infinite linear alternate-reverse;
+}
+
+@keyframes hero-glitch-1 {
+  0%   { clip-path: inset(10% 0 80% 0); }
+  20%  { clip-path: inset(33% 0 55% 0); }
+  40%  { clip-path: inset(5%  0 90% 0); }
+  60%  { clip-path: inset(70% 0 15% 0); }
+  80%  { clip-path: inset(50% 0 30% 0); }
+  100% { clip-path: inset(90% 0 3%  0); }
+}
+
+@keyframes hero-glitch-2 {
+  0%   { clip-path: inset(60% 0 20% 0); }
+  20%  { clip-path: inset(15% 0 75% 0); }
+  40%  { clip-path: inset(80% 0 5%  0); }
+  60%  { clip-path: inset(25% 0 65% 0); }
+  80%  { clip-path: inset(45% 0 40% 0); }
+  100% { clip-path: inset(5%  0 88% 0); }
+}
