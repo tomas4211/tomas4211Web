@@ -2,8 +2,11 @@
 import InteractiveTerminal from '../components/terminal/InteractiveTerminal';
 import HeroBackground from '../components/hero/HeroBackground.astro';
 import MilestonesSection from '../components/projects/MilestonesSection';
+import GithubPreview from '../components/github/GithubPreview.astro';
+import CertificateVault, { CvQuickAccess } from '../components/certificates/CertificateVault';
+import TheJourney from '../components/base/TheJourney.astro';
 import { getUnifiedProjects } from '../services/github';
-import { Shield, Code, Github, ExternalLink, GraduationCap, Zap } from 'lucide-astro';
+import { Shield, Code, Github, ExternalLink, GraduationCap, Zap, FileText } from 'lucide-astro';
 import Layout from '../layouts/Layout.astro';
 import { es, en } from '../i18n/index';
 
@@ -219,6 +222,38 @@ const milestoneExtra = {
       </div><!-- /z-10 content wrapper -->
     </section>
 
+    <!-- ── CV / PDF (mismo acceso rápido que en /repos) ───────────── -->
+    <section class="max-w-7xl mx-auto px-6 py-16" aria-labelledby="cv-home-heading">
+      <div
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 rounded-xl px-5 py-6"
+        style="background:rgba(8,8,12,0.45);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.08);box-shadow:0 0 40px rgba(255,0,255,0.04)"
+      >
+        <div class="flex items-start gap-4 min-w-0">
+          <div
+            class="p-2.5 rounded-lg shrink-0"
+            style="background:rgba(255,0,255,0.08);border:1px solid rgba(255,0,255,0.22)"
+          >
+            <FileText class="w-6 h-6 text-[#ff00ff]" />
+          </div>
+          <div class="min-w-0">
+            <p class="font-mono text-[10px] uppercase tracking-[0.35em] text-gray-600">Documentación</p>
+            <h2 id="cv-home-heading" class="text-lg font-black text-white uppercase tracking-tight font-mono mt-0.5">
+              Currículum vitae
+            </h2>
+            <p class="font-mono text-[10px] text-gray-600 mt-1 tracking-widest">
+              // Christian Paez CV — devWeb-1.pdf · abre en nueva pestaña
+            </p>
+          </div>
+        </div>
+        <div class="shrink-0 flex sm:justify-end">
+          <CvQuickAccess client:load />
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CERTIFICATES VAULT (credenciales · visor PDF/imagen) ───── -->
+    <CertificateVault client:visible />
+
     <!-- ── PROJECT MILESTONES ──────────────────────────────────────── -->
     <section class="max-w-7xl mx-auto px-6 py-20">
       <div class="flex items-center gap-4 mb-12">
@@ -229,66 +264,16 @@ const milestoneExtra = {
       <MilestonesSection client:load />
     </section>
 
-    <!-- ── GITHUB UNIFIED FEED ─────────────────────────────────────── -->
-    <section class="max-w-7xl mx-auto px-6 py-20">
-      <div class="flex items-center gap-4 mb-3">
-        <Github class="w-5 h-5 text-gray-500" />
-        <h2 class="text-xl font-bold text-white uppercase tracking-wider" data-i18n="github.heading">GitHub Unificado</h2>
-        <div class="h-px flex-1 bg-white/5"></div>
-      </div>
-      <div class="flex gap-4 mb-10 flex-wrap">
-        <a href="https://github.com/tomas4211" target="_blank" rel="noopener"
-           class="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-mono transition-all hover:brightness-125"
-           style="background:rgba(255,0,255,0.12);border:1px solid rgba(255,0,255,0.3);color:#ff00ff">
-          <Github class="w-3.5 h-3.5" /> tomas4211 · <span data-i18n="github.execBadge">Ejecutivo</span>
-        </a>
-        <a href="https://github.com/RyuTsuki08" target="_blank" rel="noopener"
-           class="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-mono transition-all hover:brightness-125"
-           style="background:rgba(0,255,255,0.12);border:1px solid rgba(0,255,255,0.3);color:#00ffff">
-          <Github class="w-3.5 h-3.5" /> RyuTsuki08 · <span data-i18n="github.labsBadge">Laboratorio Personal</span>
-        </a>
-      </div>
+    <!-- ── THE JOURNEY ──────────────────────────────────────────────── -->
+    <TheJourney />
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {projects.map(repo => {
-          const isExec    = repo.owner === 'tomas4211';
-          const accent    = isExec ? '#ff00ff' : '#00ffff';
-          const borderClr = isExec ? 'rgba(255,0,255,0.25)' : 'rgba(0,255,255,0.25)';
-          const bgClr     = isExec ? 'rgba(255,0,255,0.05)' : 'rgba(0,255,255,0.05)';
-          const badgeBg   = isExec ? 'rgba(255,0,255,0.12)' : 'rgba(0,255,255,0.12)';
-          const ghUrl     = `https://github.com/${repo.owner}`;
-          return (
-            <a href={repo.html_url} target="_blank" rel="noopener"
-               class="group flex flex-col gap-3 p-5 rounded-xl transition-all duration-300 hover:scale-[1.02] hover:brightness-110"
-               style={`border:1px solid ${borderClr};background:${bgClr};border-left:3px solid ${accent}`}>
-              <div class="flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <a href={ghUrl} target="_blank" rel="noopener"
-                     class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono mb-1.5"
-                     style={`background:${badgeBg};color:${accent};border:1px solid ${borderClr}`}
-                     onclick="event.stopPropagation()">
-                    @{repo.owner}
-                  </a>
-                  <p class="font-bold text-white text-base leading-snug break-all">{repo.name}</p>
-                </div>
-                <ExternalLink class="w-4 h-4 shrink-0 mt-1 text-gray-500 group-hover:text-white transition-colors" />
-              </div>
-              <p class="text-sm text-gray-300 font-mono leading-relaxed line-clamp-3">
-                {repo.description || <span class="text-gray-600 italic">—</span>}
-              </p>
-              <div class="mt-auto pt-2 flex items-center justify-between border-t border-white/5">
-                {repo.language
-                  ? <span class="text-xs font-mono font-semibold" style={`color:${accent}`}>{repo.language}</span>
-                  : <span />}
-                {repo.stargazers_count > 0 && <span class="text-xs text-gray-400 font-mono">★ {repo.stargazers_count}</span>}
-              </div>
-            </a>
-          );
-        })}
-      </div>
-    </section>
+    <!-- ── GITHUB PREVIEW (3 destacados + contador + /repos) ─────── -->
+    <GithubPreview projects={projects} />
 
     <!-- ── EDUCATION ───────────────────────────────────────────────── -->
+
+
+
     <section class="max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
       <div class="space-y-6">
         <div class="flex items-center gap-4">

@@ -1,0 +1,38 @@
+---
+/**
+ * /repos — HeroFx de fondo, grid/list, CV rápido (vault en la home /).
+ */
+import Layout from '../layouts/Layout.astro';
+import ReposGrid from '../components/github/ReposGrid.astro';
+import HeroFx from '../components/hero/HeroFx';
+import { getReposPageData } from '../services/github';
+
+const repos = await getReposPageData();
+---
+
+<Layout
+  title="Repositorios | Christian Paez — Lead Dev"
+  description={`${repos.length} repositorios públicos de Christian Paez — Enterprise (tomas4211) y Labs (RyuTsuki08). Proyectos de TypeScript, Python, Angular, React y más.`}
+>
+  <div class="relative min-h-screen text-white">
+    <div class="fixed inset-0 z-0 pointer-events-none" aria-hidden="true">
+      <HeroFx
+        client:load
+        opacity={0.36}
+        className="absolute inset-0 w-full h-full pointer-events-none"
+      />
+      <!-- Legibilidad: gradientes oscuros sobre el canvas -->
+      <div
+        class="absolute inset-0 bg-gradient-to-b from-[#030406]/94 via-[#050508]/90 to-[#030406]/95"
+      ></div>
+      <div
+        class="absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_50%_35%,transparent_0%,rgba(3,4,6,0.92)_65%,rgba(3,4,6,0.98)_100%)]"
+      ></div>
+      <div class="absolute inset-0 bg-black/25"></div>
+    </div>
+
+    <div class="relative z-10">
+      <ReposGrid repos={repos} />
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,70 @@
+---
+// TheJourney.astro — "The Journey" section wrapper
+// Astro 6 + Tailwind 4. React island hydrates on scroll (client:visible).
+import TheJourneyTimeline from '../journey/TheJourneyTimeline';
+import { TIMELINE_NODES } from '../../data/timeline';
+---
+
+<section
+  id="journey"
+  aria-label="The Journey — historia de evolución técnica"
+  class="relative w-full overflow-hidden py-8"
+>
+  <!-- Ambient background: dual-orb depth effect -->
+  <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+
+    <!-- Cyan top-left orb -->
+    <div
+      class="absolute -top-48 -left-48 w-[600px] h-[600px] rounded-full"
+      style="background: radial-gradient(circle, rgba(0,255,255,0.055) 0%, transparent 70%);"
+    ></div>
+
+    <!-- Magenta bottom-right orb -->
+    <div
+      class="absolute -bottom-48 -right-48 w-[600px] h-[600px] rounded-full"
+      style="background: radial-gradient(circle, rgba(255,0,255,0.055) 0%, transparent 70%);"
+    ></div>
+
+    <!-- Purple mid pulse -->
+    <div
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full"
+      style="background: radial-gradient(circle, rgba(168,85,247,0.04) 0%, transparent 70%);"
+    ></div>
+
+    <!-- Subtle scan grid -->
+    <div
+      class="absolute inset-0 opacity-[0.022]"
+      style="
+        background-image:
+          linear-gradient(rgba(0,255,255,0.5) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0,255,255,0.5) 1px, transparent 1px);
+        background-size: 56px 56px;
+      "
+    ></div>
+  </div>
+
+  <!-- Top separator -->
+  <div
+    class="mx-auto max-w-5xl px-4 md:px-8 mb-4"
+    aria-hidden="true"
+  >
+    <div
+      class="h-px w-full"
+      style="background: linear-gradient(to right, transparent, rgba(0,255,255,0.15), rgba(255,0,255,0.15), transparent);"
+    ></div>
+  </div>
+
+  <!-- React island: lazy hydrate when section enters viewport -->
+  <TheJourneyTimeline client:visible nodes={TIMELINE_NODES} />
+
+  <!-- Bottom separator -->
+  <div
+    class="mx-auto max-w-5xl px-4 md:px-8 mt-4"
+    aria-hidden="true"
+  >
+    <div
+      class="h-px w-full"
+      style="background: linear-gradient(to right, transparent, rgba(255,0,255,0.15), rgba(0,255,255,0.15), transparent);"
+    ></div>
+  </div>
+</section>

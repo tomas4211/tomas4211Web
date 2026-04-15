@@ -12,7 +12,13 @@ function randomChar() {
   return CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)];
 }
 
-const HeroFx: React.FC = () => {
+interface HeroFxProps {
+  /** Opacidad del canvas (0–1). Por defecto 0.65; para /repos suele bajarse. */
+  opacity?: number;
+  className?: string;
+}
+
+const HeroFx: React.FC<HeroFxProps> = ({ opacity = 0.65, className }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef   = useRef<number>(0);
   const parts     = useRef<Particle[]>([]);
@@ -92,8 +98,8 @@ const HeroFx: React.FC = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none"
-      style={{ opacity: 0.65 }}
+      className={className ?? 'absolute inset-0 w-full h-full pointer-events-none'}
+      style={{ opacity }}
     />
   );
 };

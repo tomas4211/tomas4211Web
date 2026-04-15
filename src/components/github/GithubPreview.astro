@@ -1,0 +1,40 @@
+---
+/**
+ * Landing: exactamente 3 repos destacados (prioridad Enterprise + hero tomas4211Web),
+ * contador unificado y CTA a la vista completa /repos.
+ */
+import { Github } from 'lucide-astro';
+import GithubPreviewSection from './GithubPreviewSection';
+import { selectFeaturedRepos } from '../../services/featuredRepos';
+import type { Repo } from '../../services/github';
+
+interface Props {
+  projects: Repo[];
+}
+
+const { projects } = Astro.props;
+const featured = selectFeaturedRepos(projects);
+const enterprise = projects.filter(r => r.owner === 'tomas4211').length;
+const labs = projects.filter(r => r.owner === 'RyuTsuki08').length;
+---
+
+<section class="max-w-7xl mx-auto px-6 py-20">
+  <div class="flex items-center gap-4 mb-2">
+    <Github class="w-5 h-5 text-gray-600" />
+    <h2 class="text-xl font-black text-white uppercase tracking-wider font-mono" data-i18n="github.heading">
+      GitHub Unificado
+    </h2>
+    <div class="h-px flex-1" style="background:linear-gradient(to right,rgba(255,255,255,0.06),transparent)"></div>
+  </div>
+  <p class="font-mono text-[10px] text-gray-700 mb-8 tracking-widest">
+    // vista previa · 3 destacados · enterprise + labs
+  </p>
+
+  <GithubPreviewSection
+    client:visible
+    featured={featured}
+    total={projects.length}
+    enterprise={enterprise}
+    labs={labs}
+  />
+</section>

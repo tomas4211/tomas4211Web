@@ -1,0 +1,15 @@
+---
+/**
+ * Vista detallada: grid denso estilo “product grid” + panel lateral (React).
+ */
+import ReposGridClient from './ReposGridClient';
+import type { RepoFull } from '../../services/github';
+
+interface Props {
+  repos: RepoFull[];
+}
+
+const { repos } = Astro.props;
+---
+
+<ReposGridClient client:load repos={repos} />
