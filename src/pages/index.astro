@@ -1,7 +1,7 @@
 ---
 import InteractiveTerminal from '../components/terminal/InteractiveTerminal';
 import HeroBackground from '../components/hero/HeroBackground.astro';
-import MilestonesSection from '../components/projects/MilestonesSection';
+import ProjectsCarousel from '../components/projects/ProjectsCarousel.tsx';
 import GithubPreview from '../components/github/GithubPreview.astro';
 import CertificateVault, { CvQuickAccess } from '../components/certificates/CertificateVault';
 import TheJourney from '../components/base/TheJourney.astro';
@@ -217,6 +217,12 @@ const milestoneExtra = {
             <span class="text-gray-300" data-i18n="hero.ctaBtn">Iniciar Sesión</span>
             <Zap class="w-4 h-4 text-[#00ffff] opacity-0 group-hover:opacity-100 transition-opacity" />
           </button>
+          <a href="#agenda"
+             class="group flex items-center gap-3 px-7 py-3 rounded-lg font-mono text-sm uppercase tracking-widest transition-all"
+             style="background:rgba(255,0,255,0.06);border:1px solid rgba(255,0,255,0.3)">
+            <span class="text-[#ff00ff] group-hover:animate-ping">●</span>
+            <span class="text-gray-300" data-i18n="hero.agendaBtn">Agendar Reunión</span>
+          </a>
           <p class="text-gray-600 text-xs font-mono" data-i18n="hero.ctaHint">{d.hero.ctaHint}</p>
         </div>
       </div><!-- /z-10 content wrapper -->
@@ -254,15 +260,8 @@ const milestoneExtra = {
     <!-- ── CERTIFICATES VAULT (credenciales · visor PDF/imagen) ───── -->
     <CertificateVault client:visible />
 
-    <!-- ── PROJECT MILESTONES ──────────────────────────────────────── -->
-    <section class="max-w-7xl mx-auto px-6 py-20">
-      <div class="flex items-center gap-4 mb-12">
-        <span class="font-mono text-[10px] uppercase tracking-[0.4em] text-gray-600" data-i18n="milestones.heading">hitos</span>
-        <div class="h-px flex-1 bg-white/5"></div>
-        <span class="font-mono text-[10px] text-gray-700">// Click para detalles</span>
-      </div>
-      <MilestonesSection client:load />
-    </section>
+    <!-- ── PROJECTS CAROUSEL ───────────────────────────────────────── -->
+    <ProjectsCarousel client:load initialLang={initial} />
 
     <!-- ── THE JOURNEY ──────────────────────────────────────────────── -->
     <TheJourney />
@@ -325,6 +324,47 @@ const milestoneExtra = {
       </div>
     </section>
 
+    <!-- ── AGENDA / CAL.COM ──────────────────────────────────────────────── -->
+    <section id="agenda" class="relative max-w-7xl mx-auto px-6 py-24 flex justify-center items-center overflow-hidden">
+      <!-- Background elements for cyberpunk feel -->
+      <div class="absolute inset-0 pointer-events-none">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#ff00ff]/10 rounded-full blur-[120px]"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30rem] h-[30rem] bg-[#00ffff]/10 rounded-full blur-[120px]"></div>
+      </div>
+      
+      <div class="relative z-10 w-full max-w-3xl rounded-2xl p-10 md:p-16 text-center group transition-all duration-500 hover:scale-[1.02]"
+           style="background:rgba(10,10,15,0.6); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border:1px solid rgba(0,255,255,0.2); box-shadow:0 0 50px rgba(0,255,255,0.05), inset 0 0 20px rgba(255,0,255,0.05);">
+        
+        <!-- Cyberpunk borders -->
+        <div class="absolute top-0 left-0 w-8 h-px bg-[#00ffff]"></div>
+        <div class="absolute top-0 left-0 w-px h-8 bg-[#00ffff]"></div>
+        <div class="absolute bottom-0 right-0 w-8 h-px bg-[#ff00ff]"></div>
+        <div class="absolute bottom-0 right-0 w-px h-8 bg-[#ff00ff]"></div>
+        
+        <!-- Top right accent -->
+        <div class="absolute top-4 right-4 flex gap-1">
+          <div class="w-1.5 h-1.5 rounded-full bg-[#ff00ff] animate-pulse"></div>
+          <div class="w-1.5 h-1.5 rounded-full bg-[#00ffff] animate-pulse" style="animation-delay: 0.2s"></div>
+        </div>
+
+        <h2 class="text-4xl md:text-5xl font-black uppercase tracking-tighter text-white mb-6">
+          <span style="text-shadow:0 0 15px rgba(0,255,255,0.6)" data-i18n="agenda.title1">{d.agenda.title1}</span> <span class="text-[#ff00ff]" style="text-shadow:0 0 15px rgba(255,0,255,0.6)" data-i18n="agenda.title2">{d.agenda.title2}</span>
+        </h2>
+        <p class="text-gray-400 font-mono text-sm mb-10 max-w-lg mx-auto leading-relaxed" data-i18n="agenda.desc">
+          {d.agenda.desc}
+        </p>
+        
+        <a href="https://cal.com/christian-paez-btm6qm" target="_blank" rel="noopener"
+           class="inline-flex items-center gap-4 px-10 py-5 rounded-lg font-mono text-lg uppercase tracking-[0.2em] transition-all duration-300 relative overflow-hidden group/btn"
+           style="background:rgba(255,0,255,0.1); border:1px solid rgba(255,0,255,0.5); box-shadow:0 0 20px rgba(255,0,255,0.2)">
+           <!-- Animated background glow -->
+           <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-[#ff00ff]/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 ease-in-out"></div>
+           <span class="relative z-10 text-white group-hover/btn:text-[#00ffff] transition-colors" data-i18n="agenda.btn">{d.agenda.btn}</span>
+           <span class="relative z-10 text-[#00ffff] group-hover/btn:text-[#ff00ff] group-hover/btn:translate-x-2 transition-all">>></span>
+        </a>
+      </div>
+    </section>
+
     <!-- ── FOOTER ──────────────────────────────────────────────────── -->
     <footer class="max-w-7xl mx-auto px-6 py-10 border-t border-white/5 flex flex-wrap justify-between items-center gap-4">
       <span class="text-[10px] font-mono text-gray-700 uppercase tracking-widest" data-i18n="footer.copyright">© 2026 Christian Paez // v2.0.0-NINJA</span>
@@ -348,6 +388,7 @@ const dicts: Record<string, Record<string, string>> = {
     'hero.role': 'Lead Developer & PM',
     'hero.tagline': 'Arquitecto Frontend Senior construyendo sistemas de alto rendimiento y cultura de ingeniería en Caracas, desde 2022.',
     'hero.ctaBtn': 'Iniciar Sesión',
+    'hero.agendaBtn': 'Agendar Reunión',
     'hero.ctaHint': 'Escribe fastfetch después de abrir para ver las specs',
     'identity.pm.label': 'Liderazgo Ejecutivo',
     'identity.pm.title': 'Gestión de Proyectos',
@@ -383,6 +424,10 @@ const dicts: Record<string, Record<string, string>> = {
     'education.items.1.year': '2023',
     'education.cta.title': 'Listo para Despliegue',
     'education.cta.body': 'Disponible para proyectos de alto impacto que requieran gestión profesional y profunda rigurosidad técnica.',
+    'agenda.title1': 'Agendar',
+    'agenda.title2': 'Despliegue',
+    'agenda.desc': 'Selecciona un espacio en mi calendario para discutir tu próximo proyecto, integraciones de alto nivel o arquitectura de sistemas.',
+    'agenda.btn': 'Agendar Reunión',
     'footer.copyright': '© 2026 Christian Paez // v2.0.0-NINJA',
     'footer.pmStatus': '● PM : ACTIVO',
     'footer.cliStatus': '● CLI: EN LÍNEA',
@@ -392,6 +437,7 @@ const dicts: Record<string, Record<string, string>> = {
     'hero.role': 'Lead Developer & PM',
     'hero.tagline': 'Senior Frontend Architect building high-performance systems and engineering culture in Caracas — since 2022.',
     'hero.ctaBtn': 'Initialize Session',
+    'hero.agendaBtn': 'Schedule Meeting',
     'hero.ctaHint': 'Type fastfetch after opening for specs',
     'identity.pm.label': 'Executive Leadership',
     'identity.pm.title': 'Project Management',
@@ -427,6 +473,10 @@ const dicts: Record<string, Record<string, string>> = {
     'education.items.1.year': '2023',
     'education.cta.title': 'Ready for Deployment',
     'education.cta.body': 'Available for high-stakes projects requiring both strong management and deep technical rigor.',
+    'agenda.title1': 'Schedule',
+    'agenda.title2': 'Deployment',
+    'agenda.desc': 'Select a slot on my calendar to discuss your next project, high-level integrations, or system architecture.',
+    'agenda.btn': 'Schedule Meeting',
     'footer.copyright': '© 2026 Christian Paez // v2.0.0-NINJA',
     'footer.pmStatus': '● PM : ACTIVE',
     'footer.cliStatus': '● CLI: ONLINE',

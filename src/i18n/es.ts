@@ -17,6 +17,7 @@ export const es = {
     tagline:
       'Desarrollador Full-Stack | Project Manager | Entusiasta Autodidacta.\nConstruyendo soluciones escalables y automatizando entornos desde agosto de 2022.\nActualmente cursando el 3er semestre de TSU en Informática en el IUJO.',
     ctaBtn: '$ Iniciar Sesión',
+    agendaBtn: 'Agendar Reunión',
     ctaHint: 'Escribe fastfetch después de abrir para ver las specs',
   },
 
@@ -44,6 +45,113 @@ export const es = {
     { val: 'IUJO S3',  label: 'En curso' },
     { val: '×2',       label: 'Identidades GitHub' },
   ],
+
+  // Projects Carousel
+  featuredProjects: {
+    heading: 'Proyectos Destacados',
+    items: [
+      {
+        id: 'upcambios',
+        title: 'UpCambios Venezuela',
+        subtitle: 'Plataforma Integral para Mesa de Cambio',
+        mediaType: 'image',
+        image: '/screenshots/upcambios-screenshot.png',
+        url: 'https://upcambiosve.com',
+        cta: 'Visitar Plataforma',
+        tech: ['React 19', 'TypeScript', 'Node.js', 'PostgreSQL', 'AWS S3 / R2'],
+        features: [
+          { icon: 'shield', title: 'Flujo KYC Riguroso', desc: 'Carga segura de Cédula y Selfie a Object Storage privado.' },
+          { icon: 'server', title: 'Seguridad Bancaria Admin', desc: 'Pre-signed URLs con caducidad (5 min) para revisar documentos.' },
+          { icon: 'cloud', title: 'Optimización QA Serverless', desc: 'Entorno de pruebas escalable y de coste cero para clientes.' },
+          { icon: 'activity', title: 'Producción Unificada', desc: 'VPS + Nginx + PM2 + Cloudflare (WAF/SSL) para máxima seguridad.' }
+        ]
+      },
+      {
+        id: 'credix-web',
+        title: 'Credix Web',
+        subtitle: 'Refactorización Completa: React → Angular',
+        mediaType: 'image',
+        image: '/screenshots/credix-web-screenshot.png',
+        url: 'https://credix.net',
+        cta: 'Visitar Plataforma',
+        tech: ['Angular 19', 'NX Monorepo', 'TypeScript', 'TailwindCSS'],
+        features: [
+          { icon: 'shield', title: 'Formulario Complejo', desc: 'Formulario dinámico adaptado estrictamente al modelo de negocio.' },
+          { icon: 'server', title: 'Arquitectura Escalable', desc: 'Migración a NX Monorepo para compartir librerías.' },
+          { icon: 'cloud', title: 'Rendimiento Optimizado', desc: 'Mejora significativa en LCP y tiempos de carga.' },
+          { icon: 'activity', title: 'SSO Integrado', desc: 'Autenticación centralizada y manejo de sesiones seguras.' }
+        ]
+      },
+      {
+        id: 'crm',
+        title: 'Sistema CRM Avanzado',
+        subtitle: 'Gestión Multi-Tenant y Multi-Moneda',
+        mediaType: 'image',
+        image: '/screenshots/credix-crm/credix-crm-3.png',
+        url: '#',
+        cta: 'Uso Interno',
+        tech: ['Angular', 'Node.js', 'PostgreSQL', 'RBAC'],
+        features: [
+          { icon: 'shield', title: 'Arquitectura Multi-tenant', desc: 'Aislamiento de datos seguro por empresa cliente.' },
+          { icon: 'server', title: 'Soporte Multi-moneda', desc: 'Conversiones y reportes financieros nativos.' },
+          { icon: 'cloud', title: 'Embudo de Ventas', desc: 'Pipeline visual para gestión y seguimiento de leads.' },
+          { icon: 'activity', title: 'Control de Acceso (RBAC)', desc: 'Modularidad estructurada por departamentos y roles.' }
+        ]
+      },
+      {
+        id: 'finance-pwa',
+        title: 'Finance PWA App',
+        subtitle: 'Progressive Web App Financiera',
+        mediaType: 'video',
+        video: '/screenshots/finance_PWA_screenshot.mp4',
+        image: '',
+        url: '#',
+        cta: 'Repo Privado',
+        isGithub: true,
+        tech: ['React', 'TypeScript', 'PWA', 'TailwindCSS'],
+        features: [
+          { icon: 'activity', title: 'Offline-First', desc: 'Sincronización de datos mediante Service Workers.' },
+          { icon: 'server', title: 'Gestión de Estado', desc: 'Arquitectura escalable para flujos financieros.' },
+          { icon: 'cloud', title: 'Instalable', desc: 'Experiencia nativa en dispositivos móviles y escritorio.' },
+          { icon: 'shield', title: 'Seguridad', desc: 'Almacenamiento encriptado de información local.' }
+        ]
+      },
+      {
+        id: 'mango-brains',
+        title: 'Mango Brains',
+        subtitle: 'Analizador de EEG (Electroencefalogramas)',
+        mediaType: 'code',
+        image: '',
+        url: 'https://github.com/RyuTsuki08/mango_brains',
+        cta: 'Ver Repositorio',
+        isGithub: true,
+        tech: ['Python', 'Flask', 'Plotly / Seaborn', 'TailwindCSS'],
+        features: [
+          { icon: 'server', title: 'Análisis de Ondas', desc: 'Procesamiento de patrones de actividad cerebral y emociones.' },
+          { icon: 'activity', title: 'Data Visualization', desc: 'Gráficas complejas interactivas con Plotly y Matplotlib.' },
+          { icon: 'cloud', title: 'Arquitectura Web', desc: 'Servidor Flask con Jinja2 para renderizado dinámico.' },
+          { icon: 'shield', title: 'Investigación Base', desc: 'Validado con datasets de estudios clínicos de UC Berkeley.' }
+        ]
+      },
+      {
+        id: 'cabiri',
+        title: 'Proyecto Cabiri',
+        subtitle: 'IA Predictiva con Redes LSTM',
+        mediaType: 'code',
+        image: '',
+        url: 'https://github.com/i1-KP/Proyecto_Cabiri',
+        cta: 'Ver Repositorio',
+        isGithub: true,
+        tech: ['Python', 'TensorFlow', 'Keras', 'LSTM'],
+        features: [
+          { icon: 'activity', title: 'Deep Learning', desc: 'Redes neuronales LSTM bidireccionales y BatchNormalization.' },
+          { icon: 'server', title: 'Procesamiento de Secuencias', desc: 'Tokenización a nivel de caracteres para análisis NLP.' },
+          { icon: 'shield', title: 'Aplicación en Ciberseguridad', desc: 'Análisis y generación de contraseñas vulnerables.' },
+          { icon: 'cloud', title: 'Inferencia Recursiva', desc: 'Predicción iterativa y algoritmos de cracking heurístico.' }
+        ]
+      }
+    ]
+  },
 
   // Milestones section
   milestones: {
@@ -79,6 +187,14 @@ export const es = {
     execBadge: '· Ejecutivo',
     labsBadge: '· Laboratorio Personal',
     noDescription: 'Sin descripción.',
+  },
+
+  // Agenda
+  agenda: {
+    title1: 'Agendar',
+    title2: 'Despliegue',
+    desc: 'Selecciona un espacio en mi calendario para discutir tu próximo proyecto, integraciones de alto nivel o arquitectura de sistemas.',
+    btn: 'Agendar Reunión',
   },
 
   // Education
