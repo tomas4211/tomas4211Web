@@ -3,7 +3,7 @@
  */
 export type CertKind = 'pdf' | 'image';
 
-export type CertProvider = 'Platzi' | 'Uneweb' | 'Samsung SIC' | 'Udemy';
+export type CertProvider = 'Platzi' | 'Uneweb' | 'Samsung SIC' | 'Udemy' | 'Social Oplesk';
 
 export interface Certificate {
   id: string;
@@ -18,30 +18,43 @@ export interface Certificate {
   kind: CertKind;
   /** Miniatura opcional; si falla la carga, el vault muestra fallback */
   thumb?: string;
+  /** 'done' = completado (default) · 'pending' = en curso */
+  status?: 'done' | 'pending';
+  /** Para certificados pending: fecha estimada de finalización */
+  eta?: string;
+  /** Skills/temas destacados */
+  highlights?: string[];
 }
 
 export const CERTIFICATES: Certificate[] = [
+  // ─── Social Oplesk (más recientes primero) ────────────────────────────────
   {
-    id: 'platzi-2021',
-    provider: 'Platzi',
-    title: 'Formación Platzi · Escuela Web',
-    dateLabel: 'Oct 2021',
-    tier: 'labs',
-    asset: '/certs/platzi-2021.pdf',
+    id: 'social-oplesk-devsecops-2027',
+    provider: 'Social Oplesk',
+    title: 'Diplomado DevSecOps',
+    dateLabel: '3 Nov 2026',
+    hours: 150,
+    tier: 'enterprise',
+    asset: '',
     kind: 'pdf',
-    thumb: '/certs/platzi-2021-thumb.png',
+    thumb: '/certs/social-oplesk-2026-thumb.png',
+    status: 'pending',
+    eta: 'Abr 2027',
+    highlights: ['DevSecOps', 'CI/CD Security', 'Cloud Security'],
   },
   {
-    id: 'uneweb-2022',
-    provider: 'Uneweb',
-    title: 'Programa académico Uneweb',
-    dateLabel: 'Ago 2022',
-    hours: 20,
-    tier: 'labs',
-    asset: '/certs/uneweb-2022.pdf',
+    id: 'social-oplesk-cybersec-2026',
+    provider: 'Social Oplesk',
+    title: 'Programa Básico · Ciberseguridad & Hacking Ético',
+    dateLabel: 'Oct 2026',
+    tier: 'enterprise',
+    asset: '/certs/social-oplesk-2026.pdf',
     kind: 'pdf',
-    thumb: '/certs/uneweb-2022-thumb.png',
+    thumb: '/certs/social-oplesk-2026-thumb.png',
+    status: 'done',
+    highlights: ['Firewall WAF', 'FFUF', 'Hacking Ético'],
   },
+  // ─── Samsung ──────────────────────────────────────────────────────────────
   {
     id: 'samsung-sic-2025',
     provider: 'Samsung SIC',
@@ -53,6 +66,7 @@ export const CERTIFICATES: Certificate[] = [
     kind: 'pdf',
     thumb: '/certs/samsung-sic-thumb.png',
   },
+  // ─── Udemy ────────────────────────────────────────────────────────────────
   {
     id: 'udemy-webdev',
     provider: 'Udemy',
@@ -82,6 +96,28 @@ export const CERTIFICATES: Certificate[] = [
     asset: '/certs/udemy-laravel.pdf',
     kind: 'pdf',
     thumb: '/certs/udemy-laravel-thumb.jpg',
+  },
+  // ─── Anteriores ───────────────────────────────────────────────────────────
+  {
+    id: 'uneweb-2022',
+    provider: 'Uneweb',
+    title: 'Programa académico Uneweb',
+    dateLabel: 'Ago 2022',
+    hours: 20,
+    tier: 'labs',
+    asset: '/certs/uneweb-2022.pdf',
+    kind: 'pdf',
+    thumb: '/certs/uneweb-2022-thumb.png',
+  },
+  {
+    id: 'platzi-2021',
+    provider: 'Platzi',
+    title: 'Formación Platzi · Escuela Web',
+    dateLabel: 'Oct 2021',
+    tier: 'labs',
+    asset: '/certs/platzi-2021.pdf',
+    kind: 'pdf',
+    thumb: '/certs/platzi-2021-thumb.png',
   },
 ];
 

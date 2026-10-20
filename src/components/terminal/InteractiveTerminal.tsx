@@ -20,6 +20,55 @@ const ASCII_NINJA = `
 interface HistoryItem {
   command: string;
   output: React.ReactNode;
+  /** If true, the command was auto-typed (no prompt interaction) */
+  autoTyped?: boolean;
+}
+
+// ─── Fastfetch output ───────────────────────────────────────────────────────
+
+function FastfetchOutput({ d }: { d: Dict }) {
+  const f = d.terminal.fastfetch;
+  return (
+    <div className="flex flex-col md:flex-row gap-6">
+      <pre className="text-[#ff00ff] text-[8px] leading-tight shrink-0 font-mono hidden md:block select-none">
+        {ASCII_NINJA}
+      </pre>
+      <div className="space-y-1 text-sm">
+        <p><span className="text-[#00ffff] font-bold">OS</span>: {f.os}</p>
+        <p><span className="text-[#00ffff] font-bold">Host</span>: {f.host}</p>
+        <p><span className="text-[#00ffff] font-bold">Shell</span>: {f.shell}</p>
+        <p><span className="text-[#00ffff] font-bold">Editor</span>: {f.editor}</p>
+        <p><span className="text-[#00ffff] font-bold">DE</span>: {f.de}</p>
+        <div className="border-t border-white/10 pt-2 mt-2 space-y-1">
+          <p><span className="text-[#ff00ff] font-bold">Education</span>: <span className="text-green-400">{f.education}</span></p>
+          <p><span className="text-[#ff00ff] font-bold">Certs</span>: {f.certs}</p>
+          <p><span className="text-[#ff00ff] font-bold">Stack</span>: {f.stack}</p>
+        </div>
+        <div className="flex gap-1 mt-2">
+          {['bg-red-500','bg-orange-500','bg-yellow-500','bg-green-500','bg-cyan-500','bg-blue-500','bg-purple-500','bg-pink-500'].map((c, i) => (
+            <div key={i} className={`w-5 h-5 rounded-sm ${c}`} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Help output ────────────────────────────────────────────────────────────
+
+function HelpOutput({ d }: { d: Dict }) {
+  const h = d.terminal.help;
+  return (
+    <div className="space-y-1">
+      <p className="text-[#00ffff] font-bold mb-2">{h.title}</p>
+      {h.commands.map(([c, desc]) => (
+        <div key={c} className="flex gap-3 text-sm">
+          <span className="text-[#ff00ff] w-44 shrink-0 font-mono">{c}</span>
+          <span className="text-gray-400">{desc}</span>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 // ─── Command resolver ──────────────────────────────────────────────────────
@@ -77,29 +126,7 @@ function resolveCommand(
 
   // ── fastfetch / neofetch ─────────────────────────────
   if (cmd === 'fastfetch' || cmd === 'neofetch') {
-    const f = t.fastfetch;
-    return (
-      <div className="flex flex-col md:flex-row gap-6">
-        <pre className="text-[#ff00ff] text-[9px] leading-tight shrink-0 font-mono hidden md:block">{ASCII_NINJA}</pre>
-        <div className="space-y-1 text-sm">
-          <p><span className="text-[#00ffff] font-bold">OS</span>: {f.os}</p>
-          <p><span className="text-[#00ffff] font-bold">Host</span>: {f.host}</p>
-          <p><span className="text-[#00ffff] font-bold">Shell</span>: {f.shell}</p>
-          <p><span className="text-[#00ffff] font-bold">Editor</span>: {f.editor}</p>
-          <p><span className="text-[#00ffff] font-bold">DE</span>: {f.de}</p>
-          <div className="border-t border-white/10 pt-2 mt-2 space-y-1">
-            <p><span className="text-[#ff00ff] font-bold">Education</span>: <span className="text-green-400">{f.education}</span></p>
-            <p><span className="text-[#ff00ff] font-bold">Certs</span>: {f.certs}</p>
-            <p><span className="text-[#ff00ff] font-bold">Stack</span>: {f.stack}</p>
-          </div>
-          <div className="flex gap-1 mt-2">
-            {['bg-red-500','bg-orange-500','bg-yellow-500','bg-green-500','bg-cyan-500','bg-blue-500','bg-purple-500','bg-pink-500'].map((c, i) => (
-              <div key={i} className={`w-5 h-5 rounded-sm ${c}`} />
-            ))}
-          </div>
-        </div>
-      </div>
-    );
+    return <FastfetchOutput d={d} />;
   }
 
   // ── cat [project].md ────────────────────────────────
@@ -148,21 +175,16 @@ function resolveCommand(
     if (target !== 'es' && target !== 'en') {
       return (
         <p className="text-red-400">
-          {d.lang === 'es'
-            ? 'Uso: lang [es|en]'
-            : 'Usage: lang [es|en]'}
+          {d.lang === 'es' ? 'Uso: lang [es|en]' : 'Usage: lang [es|en]'}
         </p>
       );
     }
-
-    // Trigger glitch reboot animation then switch lang
     setRebooting(true);
     setTimeout(() => {
       setLang(target);
       setHistory([]);
       setRebooting(false);
     }, 1800);
-
     return (
       <p className="text-[#fefe00] animate-pulse">
         {t.langReboot(target)}
@@ -183,21 +205,45 @@ function resolveCommand(
 
   // ── help ─────────────────────────────────────────────
   if (cmd === 'help') {
-    const h = t.help;
-    return (
-      <div className="space-y-1">
-        <p className="text-[#00ffff] font-bold mb-2">{h.title}</p>
-        {h.commands.map(([c, desc]) => (
-          <div key={c} className="flex gap-3 text-sm">
-            <span className="text-[#ff00ff] w-44 shrink-0 font-mono">{c}</span>
-            <span className="text-gray-400">{desc}</span>
-          </div>
-        ))}
-      </div>
-    );
+    return <HelpOutput d={d} />;
   }
 
   return null; // unknown
+}
+
+// ─── Typewriter hook ────────────────────────────────────────────────────────
+
+function useTypewriter(
+  text: string,
+  active: boolean,
+  onDone: () => void,
+  speed = 80,
+) {
+  const [displayed, setDisplayed] = useState('');
+  const idxRef = useRef(0);
+
+  useEffect(() => {
+    if (!active) { setDisplayed(''); idxRef.current = 0; return; }
+    idxRef.current = 0;
+    setDisplayed('');
+
+    // Random "hacker" delay between keystrokes
+    const tick = () => {
+      if (idxRef.current >= text.length) { onDone(); return; }
+      const jitter = speed + Math.random() * 60 - 20; // ±20 ms variation
+      setTimeout(() => {
+        idxRef.current += 1;
+        setDisplayed(text.slice(0, idxRef.current));
+        tick();
+      }, Math.max(20, jitter));
+    };
+    // Small initial delay before starting
+    const init = setTimeout(tick, 600);
+    return () => clearTimeout(init);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active]);
+
+  return displayed;
 }
 
 // ─── Component ──────────────────────────────────────────────────────────────
@@ -215,26 +261,84 @@ const InteractiveTerminal: React.FC<Props> = ({ initialLang = 'es' }) => {
   const [cmdIdx, setCmdIdx]   = useState(-1);
   const [rebooting, setRebooting] = useState(false);
 
+  // Typewriter state
+  const [typing, setTyping]         = useState(false);
+  const [typingDone, setTypingDone] = useState(false);
+  const [showCursor, setShowCursor] = useState(true);
+
   const scrollRef  = useRef<HTMLDivElement>(null);
   const inputRef   = useRef<HTMLInputElement>(null);
 
   const d = lang === 'es' ? es : en;
 
-  // Broadcast lang to the page so Astro elements can react
+  const BOOT_CMD = 'fastfetch';
+
+  // Typewriter display
+  const typedText = useTypewriter(
+    BOOT_CMD,
+    typing,
+    () => {
+      // After typing done: add to history and show output
+      setTimeout(() => {
+        setTypingDone(true);
+        setTyping(false);
+        const output = <FastfetchOutput d={d} />;
+        const helpOut = <HelpOutput d={d} />;
+        setHistory([
+          { command: BOOT_CMD, output, autoTyped: true },
+          { command: '--help', output: helpOut, autoTyped: true },
+        ]);
+      }, 300);
+    },
+    75,
+  );
+
+  // Blinking cursor while typing
+  useEffect(() => {
+    if (!typing && typingDone) return;
+    const t = setInterval(() => setShowCursor(c => !c), 530);
+    return () => clearInterval(t);
+  }, [typing, typingDone]);
+
+  // On open: start typewriter sequence
+  useEffect(() => {
+    if (isOpen) {
+      setHistory([]);
+      setTypingDone(false);
+      setTyping(false);
+      // Small delay so the window animation finishes first
+      const t = setTimeout(() => setTyping(true), 550);
+      return () => clearTimeout(t);
+    }
+  }, [isOpen]);
+
+  // Focus input after typewriter completes
+  useEffect(() => {
+    if (typingDone) setTimeout(() => inputRef.current?.focus(), 80);
+  }, [typingDone]);
+
+  // Broadcast lang
   useEffect(() => {
     document.documentElement.setAttribute('data-lang', lang);
     window.dispatchEvent(new CustomEvent('langchange', { detail: { lang } }));
   }, [lang]);
 
+  // Auto-scroll
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [history]);
+  }, [history, typedText]);
 
+  // Listen for lang changes from the page
   useEffect(() => {
-    if (isOpen) setTimeout(() => inputRef.current?.focus(), 80);
-  }, [isOpen]);
+    const handler = (e: Event) => {
+      const l = (e as CustomEvent).detail?.lang as Lang;
+      if (l && l !== lang) setLang(l);
+    };
+    window.addEventListener('setlang', handler);
+    return () => window.removeEventListener('setlang', handler);
+  }, [lang]);
 
   const handleCommand = useCallback((e: React.FormEvent) => {
     e.preventDefault();
@@ -242,7 +346,6 @@ const InteractiveTerminal: React.FC<Props> = ({ initialLang = 'es' }) => {
     if (!raw) return;
 
     const lower = raw.toLowerCase();
-
     if (lower === 'clear') { setHistory([]); setInput(''); setCmdIdx(-1); return; }
     if (lower === 'exit')  { setIsOpen(false); setInput(''); return; }
 
@@ -364,34 +467,63 @@ const InteractiveTerminal: React.FC<Props> = ({ initialLang = 'es' }) => {
                   <p className="text-gray-600">{d.terminal.bootHint}</p>
                 </div>
 
+                {/* ── Typewriter line (shown while typing, before history populates) ── */}
+                {typing && !typingDone && (
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[#ff00ff]">❯</span>
+                      <span className="text-[#00ffff]">~</span>
+                      <span className="text-white">{typedText}</span>
+                      {/* Blinking block cursor */}
+                      <span
+                        className="inline-block w-2 h-4 align-middle"
+                        style={{
+                          background: '#00ffff',
+                          opacity: showCursor ? 1 : 0,
+                          transition: 'opacity 0.1s',
+                          verticalAlign: 'middle',
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
+
                 {/* Command history */}
                 {history.map((item, i) => (
-                  <div key={i} className="space-y-1">
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.25, delay: i * 0.08 }}
+                    className="space-y-1"
+                  >
                     <div className="flex items-center gap-2">
                       <span className="text-[#ff00ff]">❯</span>
                       <span className="text-[#00ffff]">~</span>
                       <span className="text-white">{item.command}</span>
                     </div>
                     <div className="ml-7 leading-relaxed">{item.output}</div>
-                  </div>
+                  </motion.div>
                 ))}
 
-                {/* Active input */}
-                <form onSubmit={handleCommand} className="flex items-center gap-2">
-                  <span className="text-[#ff00ff]">❯</span>
-                  <span className="text-[#00ffff]">~</span>
-                  <input
-                    ref={inputRef}
-                    type="text"
-                    value={input}
-                    onChange={e => setInput(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    className="flex-1 bg-transparent border-none outline-none text-white caret-[#ff00ff]"
-                    spellCheck={false}
-                    autoComplete="off"
-                    disabled={rebooting}
-                  />
-                </form>
+                {/* Active input — only shown when typewriter is done */}
+                {typingDone && (
+                  <form onSubmit={handleCommand} className="flex items-center gap-2">
+                    <span className="text-[#ff00ff]">❯</span>
+                    <span className="text-[#00ffff]">~</span>
+                    <input
+                      ref={inputRef}
+                      type="text"
+                      value={input}
+                      onChange={e => setInput(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      className="flex-1 bg-transparent border-none outline-none text-white caret-[#ff00ff]"
+                      spellCheck={false}
+                      autoComplete="off"
+                      disabled={rebooting}
+                    />
+                  </form>
+                )}
               </div>
             </motion.div>
           </>

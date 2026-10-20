@@ -15,7 +15,7 @@ export const es = {
   hero: {
     role: 'Full-Stack Developer & Project Manager',
     tagline:
-      'Desarrollador Full-Stack | Project Manager | Entusiasta Autodidacta.\nConstruyendo soluciones escalables y automatizando entornos desde agosto de 2022.\nActualmente cursando el 3er semestre de TSU en Informática en el IUJO.',
+      'Desarrollador Fullstack & Lead Developer listo para traducir ideas de negocio en código real — con un equipo o yo solo. 😉\nConstruyendo productos web desde 2022 en Caracas.',
     ctaBtn: '$ Iniciar Sesión',
     agendaBtn: 'Agendar Reunión',
     ctaHint: 'Escribe fastfetch después de abrir para ver las specs',

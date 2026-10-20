@@ -5,6 +5,7 @@ import ProjectsCarousel from '../components/projects/ProjectsCarousel.tsx';
 import GithubPreview from '../components/github/GithubPreview.astro';
 import CertificateVault, { CvQuickAccess } from '../components/certificates/CertificateVault';
 import TheJourney from '../components/base/TheJourney.astro';
+import CollapsibleSection from '../components/ui/CollapsibleSection';
 import { getUnifiedProjects } from '../services/github';
 import { Shield, Code, Github, ExternalLink, GraduationCap, Zap, FileText } from 'lucide-astro';
 import Layout from '../layouts/Layout.astro';
@@ -257,14 +258,18 @@ const milestoneExtra = {
       </div>
     </section>
 
-    <!-- ── CERTIFICATES VAULT (credenciales · visor PDF/imagen) ───── -->
-    <CertificateVault client:visible />
+    <!-- ── CERTIFICATES VAULT ─────────────────────────────────────────── -->
+    <CollapsibleSection client:load id="cert-vault" accent="#ff00ff">
+      <CertificateVault client:visible />
+    </CollapsibleSection>
 
-    <!-- ── PROJECTS CAROUSEL ───────────────────────────────────────── -->
+    <!-- ── PROJECTS CAROUSEL ─────────────────────────────────────────── -->
     <ProjectsCarousel client:load initialLang={initial} />
 
-    <!-- ── THE JOURNEY ──────────────────────────────────────────────── -->
-    <TheJourney />
+    <!-- ── THE JOURNEY ──────────────────────────────────────────────────── -->
+    <CollapsibleSection client:load id="journey" accent="#ff00ff">
+      <TheJourney />
+    </CollapsibleSection>
 
     <!-- ── GITHUB PREVIEW (3 destacados + contador + /repos) ─────── -->
     <GithubPreview projects={projects} />
@@ -386,7 +391,7 @@ const dicts: Record<string, Record<string, string>> = {
   es: {
     'nav.status': 'SIS.LISTO',
     'hero.role': 'Lead Developer & PM',
-    'hero.tagline': 'Arquitecto Frontend Senior construyendo sistemas de alto rendimiento y cultura de ingeniería en Caracas, desde 2022.',
+    'hero.tagline': 'Desarrollador Fullstack & Lead Developer listo para traducir ideas de negocio en código real — con un equipo o yo solo. 😉\nConstruyendo productos web desde 2022 en Caracas.',
     'hero.ctaBtn': 'Iniciar Sesión',
     'hero.agendaBtn': 'Agendar Reunión',
     'hero.ctaHint': 'Escribe fastfetch después de abrir para ver las specs',
@@ -435,7 +440,7 @@ const dicts: Record<string, Record<string, string>> = {
   en: {
     'nav.status': 'SYS.READY',
     'hero.role': 'Lead Developer & PM',
-    'hero.tagline': 'Senior Frontend Architect building high-performance systems and engineering culture in Caracas — since 2022.',
+    'hero.tagline': 'Fullstack Developer & Lead Developer ready to turn business ideas into real code — with a team or just me. 😉\nShipping web products since 2022 from Caracas.',
     'hero.ctaBtn': 'Initialize Session',
     'hero.agendaBtn': 'Schedule Meeting',
     'hero.ctaHint': 'Type fastfetch after opening for specs',

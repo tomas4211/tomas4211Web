@@ -15,7 +15,7 @@ export const en: Dict = {
   hero: {
     role: 'Full-Stack Developer & Project Manager',
     tagline:
-      'Full-Stack Developer | Project Manager | Self-taught Enthusiast.\nBuilding scalable solutions and automating environments since August 2022.\nCurrently pursuing TSU in Computer Science (3rd Semester) at IUJO.',
+      'Fullstack Developer & Lead Developer ready to turn business ideas into real code — with a team or just me. 😉\nShipping web products since 2022 from Caracas.',
     ctaBtn: '$ Initialize Session',
     agendaBtn: 'Schedule Meeting',
     ctaHint: 'Type fastfetch after opening for specs',
